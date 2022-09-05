@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import { format} from 'date-fns'
 import 'react-datepicker/dist/react-datepicker.css';
 import {TimezoneContext} from "../App";
+import Loader from "./Loader";
 
 const Showevent = () => {
 
@@ -13,6 +14,7 @@ const Showevent = () => {
     const [endDate, setEndDate] = useState(null);
     const [events, setEvents] = useState([]);
     const [timezone, setTimezone] = useContext(TimezoneContext);
+    const [loader, setLoader] = useState(false);
 
     useEffect(() => {
         setTimezone(timezone);
@@ -29,6 +31,7 @@ const Showevent = () => {
     }
 
     const handleSubmit = () => {
+        setLoader(true);
         let reqParams = {
             startDate : format(startDate, 'yyyy-MM-dd'),
             endDate : format(endDate, 'yyyy-MM-dd'),
@@ -38,6 +41,7 @@ const Showevent = () => {
         axios
         .post(process.env.REACT_APP_API_PATH + '/api/appointment/get', reqParams)
         .then((response) => {
+            setLoader(false);
             if(response.status === 200){
                 setEvents(response.data.data.eventData);
             }
@@ -46,6 +50,9 @@ const Showevent = () => {
 
     return (
         <>
+            {loader && (
+                    <Loader />
+                )}
             <Navbar />
             <section className="jumbotron text-center">
                 <div className='container-sm'>

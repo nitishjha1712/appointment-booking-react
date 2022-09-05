@@ -6,6 +6,7 @@ import TimezoneSelect from 'react-timezone-select';
 import axios from "axios";
 import Navbar from "./Navbar";
 import {TimezoneContext} from "../App";
+import Loader from "./Loader";
 
 
 const Bookevent = (props) => {
@@ -15,10 +16,12 @@ const Bookevent = (props) => {
     const [activeSection, setActiveSection] = useState('book-slots');
     const [activeSlots, setActiveSlots] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState();
+    const [loader, setLoader] = useState(true);
 
     const [context, setContext] = useContext(TimezoneContext);
 
     const getFreeSlots = (date) => {
+        setLoader(true);
         let reqParams = {
             date : format(date, 'yyyy-MM-dd'),
             timezone : selectedTimezone
@@ -31,7 +34,9 @@ const Bookevent = (props) => {
           if(response.status === 200){
             setActiveSection('book-slots');
             setActiveSlots(response.data.data.availableSlots);
+            
           }
+          setLoader(false);
         });
     };
 
@@ -43,6 +48,7 @@ const Bookevent = (props) => {
 
 
     const createSlots = () => {
+        setLoader(true);
         let reqParams = {
             dateTime : format(startDate, 'yyyy-MM-dd') + " " +selectedSlot,
             timezone : selectedTimezone.replace('Calcutta', 'Kolkata'),
@@ -87,8 +93,12 @@ const Bookevent = (props) => {
         setSelectedTimezone(timezone);
     }
 
+
         return (
             <>
+                {loader && (
+                    <Loader />
+                )}
                 <Navbar />
                 <section className="jumbotron text-center">
                     <div className='container-sm'>
@@ -126,7 +136,7 @@ const Bookevent = (props) => {
                                             <div className="row justify-content-md-center form-group">
                                                 <div className='col col-lg-6'>
                                                     <div className='col col-lg-12'>{activeSlots.length == 0 ? "No slots available for " : "Slots avilility"} for {format(startDate, 'yyyy-MM-dd')}</div>
-     
+        
                                                     {activeSlots.map((slot) => {
                                                         return <label className = {selectedSlot == slot ? "col-lg-12 btn btn-secondary" : "col-lg-12"} onClick={() => handleSlotClick(slot)}>{slot}</label>
                                                     })}
