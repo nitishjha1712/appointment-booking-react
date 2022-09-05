@@ -18,7 +18,7 @@ const Bookevent = (props) => {
 
     const [context, setContext] = useContext(TimezoneContext);
 
-    const getFreeSlots = useCallback((date) => {
+    const getFreeSlots = (date) => {
         let reqParams = {
             date : format(date, 'yyyy-MM-dd'),
             timezone : selectedTimezone
@@ -33,13 +33,13 @@ const Bookevent = (props) => {
             setActiveSlots(response.data.data.availableSlots);
           }
         });
-    }, []);
+    };
 
     useEffect(() => {
         getFreeSlots(startDate);
         // console.log('context', context, selectedTimezone);
         setContext(selectedTimezone);
-    }, [startDate, selectedTimezone, getFreeSlots]);
+    }, [startDate, selectedTimezone]);
 
 
     const createSlots = () => {
