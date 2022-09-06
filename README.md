@@ -23,7 +23,7 @@ Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 ### Demo URl 
-    https://appointment-booking-react.herokuapp.com\
+    https://appointment-booking-react.vercel.app
 
         Book events Component\
             To fetch available slots as per date and timezone\
